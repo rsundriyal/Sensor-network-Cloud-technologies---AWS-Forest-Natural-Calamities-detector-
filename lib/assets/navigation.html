@@ -1,0 +1,36 @@
+<nav class="navbar-default navbar-static-side" role="navigation"  ng-controller="userTypeControl">
+    <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu">
+            <li class="nav-header">
+
+            </li>
+            <li>
+            <li class="menu-li">
+                <a href="index.html"><i class="fa fa-dashboard"></i> <span class="nav-label">Dashboard</span> </a>
+            </li>
+            </li>
+            <li ng-show="isAdmin"  class="menu-li">
+                <a href="add_sensor.html"><i class="fa fa-eye"></i> <span class="nav-label">Add Sensor</span></a>
+            </li>
+
+            <li ng-show="isAdmin"  class="menu-li">
+                <a href="add_controller.html"><i class="fa fa-wrench"></i> <span class="nav-label">Add Controller</span> </a>
+            </li>
+            <li  class="menu-li">
+                <a href="get_sensor_data.html"><i class="fa fa-list"></i> <span class="nav-label">Get Sensor Data</span></a>
+            </li>
+            <li  class="menu-li">
+                <a href="monitor.html"><i class="fa fa-bar-chart"></i> <span class="nav-label">Monitor</span></a>
+            </li>
+
+            <li  class="menu-li">
+                <a href="provision.html"><i class="fa fa-database"></i> <span class="nav-label">Provision</span></a>
+            </li>
+
+
+
+
+        </ul>
+
+    </div>
+</nav>

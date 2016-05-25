@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html ng-app = "cloud_project">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Forest Fire Detector | Get Data</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Data Tables -->
+    <link href="css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="css/plugins/dataTables/dataTables.responsive.css" rel="stylesheet">
+    <link href="css/plugins/dataTables/dataTables.tableTools.min.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+
+<body ng-controller="getSensorsFunction">
+
+
+<div id="wrapper" class="nav-wrapper">
+    <nav class="navbar-default navbar-static-side" role="navigation" ng-controller="userTypeControl">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="nav-header">
+
+                </li>
+                <li >
+                    <a href="index.html"><i class="fa fa-dashboard"></i> <span class="nav-label">Dashboard</span> </a>
+
+                </li>
+                <li ng-show="isAdmin" class="ng-cloak">
+                    <a href="add_sensor.html"><i class="fa fa-eye"></i> <span class="nav-label">Add Sensor</span></a>
+                </li>
+
+
+                <!--<li ng-show="isAdmin" class="ng-cloak">-->
+                    <!--<a href="add_controller.html"><i class="fa fa-wrench"></i> <span class="nav-label">Add Controller</span> </a>-->
+                <!--</li>-->
+                <!--<li class="active">-->
+                    <!--<a href="get_sensor_data.html"><i class="fa fa-list"></i> <span class="nav-label">Provision</span></a>-->
+                <!--</li>-->
+                <li ng-show="isAdmin" class="ng-cloak">
+                    <a href="change_sensor_status.html"><i class="fa fa-pencil-square-o"></i> <span class="nav-label">Edit Sensor</span></a>
+                </li>
+                <li ng-hide="isAdmin"  class="ng-cloak active">
+                    <a href="get_sensor_data.html"><i class="fa fa-list"></i> <span class="nav-label">Subscribe</span></a>
+                </li>
+                <li>
+                    <a href="monitor.html"><i class="fa fa-bar-chart"></i> <span class="nav-label">Monitor</span></a>
+                </li>
+
+                <!--<li>-->
+                    <!--<a href="provision.html"><i class="fa fa-database"></i> <span class="nav-label">Provision</span></a>-->
+                <!--</li>-->
+
+                <li ng-show="isAdmin" class="ng-cloak">
+                    <a href="http://52.26.5.2/status.html"><i class="fa fa-cogs "></i> <span class="nav-label">Load Balancer</span></a>
+                </li>
+
+                <li ng-show="isAdmin" class="ng-cloak">
+                    <a href="usage.html"><i class="fa fa-users"></i> <span class="nav-label">Usage</span></a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+</div>
+
+<div id="page-wrapper" class="gray-bg">
+    <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+
+            </div>
+            <ul class="nav navbar-top-links navbar-right">
+
+
+                <li>
+                    <a href="login.html">
+                        <i class="fa fa-sign-out"></i> Log out
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+    </div>
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Subscribe to Sensors</h2>
+
+        </div>
+        <div class="col-lg-2">
+
+        </div>
+    </div>
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <form class="form-horizontal">
+                    <h1 class="col-md-offset-2" style="margin-bottom: 30px;">Request Sensors</h1>
+
+                    <!--<div class="form-group"><label class="col-lg-2 control-label">Number of Sensors</label>-->
+
+                        <!--<div class="col-lg-6"><input placeholder=""  name="sensor_count" class="form-control" ng-model="sensor_count">-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <div class="form-group"><label class="col-lg-2 control-label">Controller Location</label>
+                        <div class="col-sm-6"><select class="form-control m-b" name="sensor_location" ng-model="controller_id">
+                            <option ng-repeat="controller in controllers" value="{{controller.id}}">{{controller.location}}</option>
+
+                        </select></div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-10">
+                            <button class="btn btn-md btn-primary" type="submit" ng-click="requestSensors()">Request</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="ibox float-e-margins" id="requestSensorTable" style="display: none;">
+                    <div class="ibox-title">
+                        <h5>Sensors</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>Location</th>
+                                <th>Sensor Name</th>
+                                <th>Status</th>
+                                <th>Request</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="s in sensors">
+                                <td>{{ s.location }}</td>
+                                <td>{{ s.name }}</td>
+                                <td class="center"><span class="fa fa-check" ng-if="isSensorOn(s)"></span><span class="fa fa-times" ng-if="isSensorOff(s)"></span></td>
+                                <td class="center">
+                                    <button class="btn btn-xm btn-primary"  ng-if="isSensorOn(s) && !isSubscribed(s)" data-id="test" ng-click="subscribeSensor(s.id, s.allocation_id)">Subscribe</button>
+                                    <button class="btn btn-xm btn-danger"  ng-if="isSensorOn(s) && isSubscribed(s)" data-id="test" ng-click="unsubscribeSensor(s.id, s.allocation_id)">Unsubscribe</button>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <!--<div class="ibox-title">-->
+                    <!--<h5>Editable Table in- combination with jEditable</h5>-->
+                    <!--<div class="ibox-tools">-->
+                    <!--<a class="collapse-link">-->
+                    <!--<i class="fa fa-chevron-up"></i>-->
+                    <!--</a>-->
+                    <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">-->
+                    <!--<i class="fa fa-wrench"></i>-->
+                    <!--</a>-->
+                    <!--<ul class="dropdown-menu dropdown-user">-->
+                    <!--<li><a href="#">Config option 1</a>-->
+                    <!--</li>-->
+                    <!--<li><a href="#">Config option 2</a>-->
+                    <!--</li>-->
+                    <!--</ul>-->
+                    <!--<a class="close-link">-->
+                    <!--<i class="fa fa-times"></i>-->
+                    <!--</a>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="ibox-content">-->
+                    <!--<div class="">-->
+                    <!--<a onclick="fnClickAddRow();" href="javascript:void(0);" class="btn btn-primary ">Add a new row</a>-->
+                    <!--</div>-->
+                    <!--<table class="table table-striped table-bordered table-hover " id="editable" >-->
+                    <!--<thead>-->
+                    <!--<tr>-->
+                    <!--<th>Rendering engine</th>-->
+                    <!--<th>Browser</th>-->
+                    <!--<th>Platform(s)</th>-->
+                    <!--<th>Engine version</th>-->
+                    <!--<th>CSS grade</th>-->
+                    <!--</tr>-->
+                    <!--</thead>-->
+                    <!--<tbody>-->
+                    <!--<tr class="gradeX">-->
+                    <!--<td>Trident</td>-->
+                    <!--<td>Internet-->
+                    <!--Explorer 4.0-->
+                    <!--</td>-->
+                    <!--<td>Win 95+</td>-->
+                    <!--<td class="center">4</td>-->
+                    <!--<td class="center">X</td>-->
+                    <!--</tr>-->
+
+
+
+                    <!--</tbody>-->
+                    <!--<tfoot>-->
+
+                    <!--</table>-->
+
+                    <!--</div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+
+        <div>
+            <strong>Copyright</strong> Team #13 &copy; 2015
+        </div>
+    </div>
+
+</div>
+</div>
+
+
+
+<!-- Mainly scripts -->
+<script src="js/jquery-2.1.1.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="js/plugins/jeditable/jquery.jeditable.js"></script>
+
+<!-- Data Tables -->
+<script src="js/plugins/dataTables/jquery.dataTables.js"></script>
+<script src="js/plugins/dataTables/dataTables.bootstrap.js"></script>
+<script src="js/plugins/dataTables/dataTables.responsive.js"></script>
+<script src="js/plugins/dataTables/dataTables.tableTools.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="js/inspinia.js"></script>
+<script src="js/plugins/pace/pace.min.js"></script>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-resource.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-route.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-cookies.min.js"></script>
+
+
+<script type="text/javascript" src="/client/js/controllers/testcontroller.js"></script>
+
+<!-- Page-Level Scripts -->
+<script>
+    $(document).ready(function() {
+//        $('.dataTables-example').dataTable({
+//            responsive: true,
+//            "dom": 'T<"clear">lfrtip',
+//            "tableTools": {
+//                "sSwfPath": "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
+//            }
+//        });
+
+        $('.dataTables-example').dataTable();
+
+        /* Init DataTables */
+       // var oTable = $('#editable').dataTable();
+//
+//        /* Apply the jEditable handlers to the table */
+
+
+
+    });
+    //
+    //    function fnClickAddRow() {
+    //        $('#editable').dataTable().fnAddData( [
+    //            "Custom row",
+    //            "New row",
+    //            "New row",
+    //            "New row",
+    //            "New row" ] );
+    //
+    //    }
+
+
+</script>
+<style>
+    body.DTTT_Print {
+        background: #fff;
+
+    }
+    .DTTT_Print #page-wrapper {
+        margin: 0;
+        background:#fff;
+    }
+
+    button.DTTT_button, div.DTTT_button, a.DTTT_button {
+        border: 1px solid #e7eaec;
+        background: #fff;
+        color: #676a6c;
+        box-shadow: none;
+        padding: 6px 8px;
+    }
+    button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
+        border: 1px solid #d2d2d2;
+        background: #fff;
+        color: #676a6c;
+        box-shadow: none;
+        padding: 6px 8px;
+    }
+
+    .dataTables_filter label {
+        margin-right: 5px;
+
+    }
+
+
+</style>
+</body>
+
+</html>

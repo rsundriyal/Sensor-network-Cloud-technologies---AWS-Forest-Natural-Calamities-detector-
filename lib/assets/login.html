@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html ng-app = "cloud_project">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Forest Fire Detector | Login</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="black-bg" ng-controller="signinFunction">
+
+    <div class="middle-box text-center loginscreen  animated fadeInDown" >
+        <div>
+            <h3>Forest Natural Calamities</h3>
+            <form class="m-t" >
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="Email" name="email" ng-model="email" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Password" name="password" ng-model="password" required="">
+                </div>
+                <button type="submit" ng-click="signin()" class="btn btn-primary block full-width m-b">Login</button>
+
+                <a href="#"><small>Forgot password?</small></a>
+                <p class="text-muted text-center"><small>Do not have an account?</small></p>
+                <a class="btn btn-sm btn-white btn-block" href="register.html">Create an account</a>
+            </form>
+            <p class="m-t"> <small>CMPE 281 Term Project - Ravi & Bal Krishna &copy; Spring 2016 - Prof Jerry Gao</small> </p>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="js/jquery-2.1.1.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-resource.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-route.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-cookies.min.js"></script>
+
+    <script type="text/javascript" src="/client/js/app.js"></script>
+    <!--<script type="text/javascript" src="/server.js"></script>-->
+
+    <script type="text/javascript" src="/client/js/controllers/testcontroller.js"></script>
+</body>
+
+</html>

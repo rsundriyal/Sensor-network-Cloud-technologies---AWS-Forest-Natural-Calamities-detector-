@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html ng-app="cloud_project">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Forest Fire Detector | Monitor</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Data Tables -->
+    <link href="css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link href="css/plugins/dataTables/dataTables.responsive.css" rel="stylesheet">
+    <link href="css/plugins/dataTables/dataTables.tableTools.min.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+
+<body ng-controller="getSensorsFunction">
+
+<div id="wrapper" class="nav-wrapper">
+    <nav class="navbar-default navbar-static-side" role="navigation"  ng-controller="userTypeControl">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="side-menu">
+                <li class="nav-header">
+
+                </li>
+                <li>
+                <li class="menu-li">
+                    <a href="index.html"><i class="fa fa-dashboard"></i> <span class="nav-label">Dashboard</span> </a>
+
+                </li>
+                </li>
+                <li ng-show="isAdmin"  class="ng-cloak">
+                    <a href="add_sensor.html"><i class="fa fa-eye"></i> <span class="nav-label">Add Sensor</span></a>
+                </li>
+
+                <!--<li ng-show="isAdmin"  class="ng-cloak">-->
+                    <!--<a href="add_controller.html"><i class="fa fa-wrench"></i> <span class="nav-label">Add Controller</span> </a>-->
+                <!--</li>-->
+                <li ng-hide="isAdmin"  class="ng-cloak">
+                    <a href="get_sensor_data.html"><i class="fa fa-list"></i> <span class="nav-label">Subscribe</span></a>
+                </li>
+                <li ng-show="isAdmin" class="ng-cloak">
+                    <a href="change_sensor_status.html"><i class="fa fa-pencil-square-o"></i> <span class="nav-label">Edit Sensor</span></a>
+                </li>
+                <li  class="menu-li active">
+                    <a href="monitor.html"><i class="fa fa-bar-chart"></i> <span class="nav-label">Monitor</span></a>
+                </li>
+
+                <!--<li  class="menu-li">-->
+                    <!--<a href="provision.html"><i class="fa fa-database"></i> <span class="nav-label">Provision</span></a>-->
+                <!--</li>-->
+                <li ng-show="isAdmin" class="ng-cloak">
+                    <a href="http://52.26.5.2/status.html"><i class="fa fa-cogs "></i> <span class="nav-label">Load Balancer</span></a>
+                </li>
+
+                <li ng-show="isAdmin" class="ng-cloak">
+                    <a href="usage.html"><i class="fa fa-users"></i> <span class="nav-label">Usage</span></a>
+                </li>
+
+            </ul>
+
+        </div>
+    </nav>
+
+</div>
+
+<div id="page-wrapper" class="gray-bg">
+<div class="row border-bottom">
+    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+
+        </div>
+        <ul class="nav navbar-top-links navbar-right">
+
+
+            <li>
+                <a href="login.html">
+                    <i class="fa fa-sign-out"></i> Log out
+                </a>
+            </li>
+        </ul>
+
+    </nav>
+</div>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Sensor Network</h2>
+
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+    <div class="wrapper wrapper-content animated fadeInRight" >
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>CO <small></small></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            </a>
+
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content" style="position: relative">
+                        <canvas id="updating-co-chart" ></canvas>                </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Temperature <small></small></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            </a>
+
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content" style="position: relative">
+                        <canvas id="updating-temperature-chart" ></canvas>                </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>CO2 <small></small></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            </a>
+
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content" style="position: relative">
+                        <canvas id="updating-co2-chart" ></canvas>                </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Humidity </h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            </a>
+
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content" style="position: relative">
+                        <canvas id="updating-humidity-chart" ></canvas>                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="getSubscriptionsFunction">
+<div class="row">
+<div class="col-lg-12">
+<div class="ibox float-e-margins">
+<div class="ibox-title">
+    <h5>Sensors</h5>
+    <div class="ibox-tools">
+        <a class="collapse-link">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            <i class="fa fa-wrench"></i>
+        </a>
+    </div>
+</div>
+<div class="ibox-content">
+
+<!--<table class="table table-striped table-bordered table-hover dataTables-example" >-->
+<table class="table table-striped table-bordered table-hover" >
+
+    <thead>
+<tr>
+    <th>Controller Location</th>
+    <th>Sensor</th>
+    <th>Status</th>
+    <th>Monitor</th>
+</tr>
+</thead>
+<tbody>
+
+<tr ng-repeat="s in sensors">
+    <td>{{ s.location }}</td>
+    <td>{{ s.name }}</td>
+    <td class="center"><span class="glyphicon glyphicon-ok" ng-if="isSensorOn(s)"></span><span class="glyphicon glyphicon-alert" ng-if="isSensorOff(s)"></span></td>
+    <!--<td class="center"><button class="btn btn-xm btn-success" data-id="test" ng-click="subscribeSensor(s.id, s.allocation_id)">Subscribe</button></td>-->
+    <td class="center">
+        <button class="btn btn-xm btn-success get-sensor-table" ng-if="isSensorOn(s)" id="{{ s.allocation_id }}" onclick="getSensorTable(this.id)" >getsensor</button>
+        <button class="btn btn-xm btn-success get-sensor-table" ng-if="isSensorOff(s)" style="visibility: hidden;" >Show</button>
+
+    </td>
+
+</tr>
+</tbody>
+
+</table>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div class="footer">
+
+    <div>
+        <strong>Copyright</strong> Team #13 &copy; 2015
+    </div>
+</div>
+
+</div>
+</div>
+
+
+
+<!-- Mainly scripts -->
+<script src="js/jquery-2.1.1.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="js/plugins/jeditable/jquery.jeditable.js"></script>
+
+<!-- Morris -->
+<script src="js/plugins/morris/raphael-2.1.0.min.js"></script>
+<script src="js/plugins/morris/morris.js"></script>
+<script src="//www.chartjs.org/assets/Chart.min.js"></script>
+<!-- Data Tables -->
+<script src="js/plugins/dataTables/jquery.dataTables.js"></script>
+<script src="js/plugins/dataTables/dataTables.bootstrap.js"></script>
+<script src="js/plugins/dataTables/dataTables.responsive.js"></script>
+<script src="js/plugins/dataTables/dataTables.tableTools.min.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="js/inspinia.js"></script>
+<script src="js/plugins/pace/pace.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-resource.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-route.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-cookies.min.js"></script>
+<script type="text/javascript" src="/client/js/controllers/testcontroller.js"></script>
+<!--<script src="js/demo/morris-demo.js"></script>-->
+
+<!-- Page-Level Scripts -->
+<script>
+    $(document).ready(function() {
+        $('.dataTables-example').dataTable({
+            responsive: true,
+            "dom": 'T<"clear">lfrtip',
+            "tableTools": {
+                "sSwfPath": "js/plugins/dataTables/swf/copy_csv_xls_pdf.swf"
+            }
+        });
+
+        /* Init DataTables */
+        var oTable = $('#editable').dataTable();
+//
+//        /* Apply the jEditable handlers to the table */
+        oTable.$('td').editable( '../example_ajax.php', {
+            "callback": function( sValue, y ) {
+                var aPos = oTable.fnGetPosition( this );
+                oTable.fnUpdate( sValue, aPos[0], aPos[1] );
+            },
+            "submitdata": function ( value, settings ) {
+                return {
+                    "row_id": this.parentNode.getAttribute('id'),
+                    "column": oTable.fnGetPosition( this )[2]
+                };
+            },
+
+            "width": "90%",
+            "height": "100%"
+        } );
+
+
+    });
+
+
+
+    var allocation_id = 1;
+
+    var canvasTemp = document.getElementById('updating-temperature-chart'),
+            ctx_temp = canvasTemp.getContext('2d'),
+            startingData = {
+                labels: [1, 2, 3, 4, 5, 6, 7],
+                datasets: [
+                    {
+                        fillColor : "rgba(200,147,165,0.5)",
+                        strokeColor : "rgba(151,187,205,1)",
+                        pointColor : "rgba(151,187,205,1)",
+                        pointStrokeColor : "#fff",
+                        data: [0,0,0,0,0,0,0]
+                    }
+                ]
+            },
+            latestTemperatureLabel = startingData.labels[6];
+
+    var canvasHumidity = document.getElementById('updating-humidity-chart'),
+            ctx_humidity = canvasHumidity.getContext('2d'),
+            startingHumidityData = {
+                labels: [1, 2, 3, 4, 5, 6, 7],
+                datasets: [
+                    {
+                        fillColor : "rgba(220,220,220,0.5)",
+                        strokeColor : "rgba(220,220,220,1)",
+                        pointColor : "rgba(220,220,220,1)",
+                        pointStrokeColor : "#fff",
+                        data: [0,0,0,0,0,0,0]
+                    }
+                ]
+            },
+            latestHumidityLabel = startingData.labels[6];
+
+    var canvasCO = document.getElementById('updating-co-chart'),
+            ctx_co = canvasCO.getContext('2d'),
+            startingCOData = {
+                labels: [1, 2, 3, 4, 5, 6, 7],
+                datasets: [
+                    {
+                        fillColor: "rgba(151,187,205,0.2)",
+                        strokeColor: "rgba(151,187,205,1)",
+                        pointColor: "rgba(151,187,205,1)",
+                        pointStrokeColor: "#fff",
+                        data:  [0,0,0,0,0,0,0]
+                    }
+                ]
+            },
+            latestCOLabel = startingData.labels[6];
+
+    var canvasCO2 = document.getElementById('updating-co2-chart'),
+            ctx_co2 = canvasCO2.getContext('2d'),
+            startingCO2Data = {
+                labels: [1, 2, 3, 4, 5, 6, 7],
+                datasets: [
+                    {
+                        fillColor: "rgba(151,187,205,0.2)",
+                        strokeColor: "rgba(151,187,205,1)",
+                        pointColor: "rgba(151,187,205,1)",
+                        pointStrokeColor: "#fff",
+
+                        data:  [0,0,0,0,0,0,0]
+                    }
+                ]
+            },
+            latestCO2Label = startingData.labels[6];
+
+    // Reduce the animation steps for demo clarity.
+    var myTemperatureChart = new Chart(ctx_temp).Line(startingData, {animationSteps: 15});
+    var myHumidityChart = new Chart(ctx_humidity).Line(startingHumidityData, {animationSteps: 15});
+    var myCOChart = new Chart(ctx_co).Line(startingCOData, {animationSteps: 15});
+    var myCO2Chart = new Chart(ctx_co2).Line(startingCO2Data, {animationSteps: 15});
+
+
+    setInterval(function(){
+        // Add two random numbers for each dataset
+        console.log(allocation_id);
+        $.ajax({
+            url: '/getLastSensorData',
+            type: 'GET',
+            data: {id: allocation_id},
+            success: function(data) {
+                //called when successful
+
+                console.log(data.data);
+                myTemperatureChart.addData([data.data[0].temperature], '');
+                myHumidityChart.addData([data.data[0].humidity], '');
+                myCOChart.addData([data.data[0].co], '');
+                myCO2Chart.addData([data.data[0].co2], '');
+
+                // Remove the first point so we dont just add values forever
+                myTemperatureChart.removeData();
+                myHumidityChart.removeData();
+                myCOChart.removeData();
+                myCO2Chart.removeData();
+
+            },
+            error: function(e) {
+                //called when there is an error
+                //console.log(e.message);
+            }
+        });
+
+
+
+    }, 5000);
+
+
+    $(".get-sensor-table").click(function(){
+        console.log("clicked destroy");
+    });
+
+    function getSensorTable(id) {
+        console.log("clicked get sensor table button");
+        console.log(id);
+
+        myTemperatureChart.destroy();
+        myHumidityChart.destroy();
+        myCOChart.destroy();
+        myCO2Chart.destroy();
+
+        allocation_id = id;
+
+        myTemperatureChart = new Chart(ctx_temp).Line(startingData, {animationSteps: 15});
+        myHumidityChart = new Chart(ctx_humidity).Line(startingHumidityData, {animationSteps: 15});
+        myCOChart = new Chart(ctx_co).Line(startingCOData, {animationSteps: 15});
+        myCO2Chart = new Chart(ctx_co2).Line(startingCO2Data, {animationSteps: 15});
+
+    }
+</script>
+<style>
+    body.DTTT_Print {
+        background: #fff;
+
+    }
+    .DTTT_Print #page-wrapper {
+        margin: 0;
+        background:#fff;
+    }
+
+    button.DTTT_button, div.DTTT_button, a.DTTT_button {
+        border: 1px solid #e7eaec;
+        background: #fff;
+        color: #676a6c;
+        box-shadow: none;
+        padding: 6px 8px;
+    }
+    button.DTTT_button:hover, div.DTTT_button:hover, a.DTTT_button:hover {
+        border: 1px solid #d2d2d2;
+        background: #fff;
+        color: #676a6c;
+        box-shadow: none;
+        padding: 6px 8px;
+    }
+
+    .dataTables_filter label {
+        margin-right: 5px;
+
+    }
+</style>
+</body>
+
+</html>

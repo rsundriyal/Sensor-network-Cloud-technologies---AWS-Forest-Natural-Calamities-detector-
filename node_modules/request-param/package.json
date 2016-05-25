@@ -1,0 +1,33 @@
+{
+  "name": "request-param",
+  "version": "0.2.0",
+  "description": "connect/express middleware to enable back the `req.param(name,default)` API depricated in express 4",
+  "keywords": [
+    "migrate express3 express4"
+  ],
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": {
+    "name": "Osher E"
+  },
+  "devDependencies": {
+    "mocha": "~2.2.1",
+    "mocha-ui-exports": "~0.2.2"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osher/request-param.git"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org/"
+  },
+  "readme": "request-param\r\n=============\r\nA connect/express middleware to enable back the `req.param(name,default)` API \r\ndepricated in express 4\r\n\r\nMy speculation is that they did not want to get in the discussion of what \r\nshould take precedence between routed args, query string and post body, and \r\nroll the policy on the application maker.\r\n\r\nIf you just want backward compatibility with express 3 or earlier - use this \r\nmiddleware.\r\n\r\nusage\r\n=====\r\n\r\n```\r\nvar app = require('express')()\r\n\r\napp.use( reqiore('request-param') )\r\n\r\napp.post( '/some/:value', function(req,res,next) {\r\n    req.param('value'); // returns :value, or ?value=<value>, or body.value\r\n})\r\n```\r\n\r\ninstall\r\n=======\r\n\r\n`npm install request-param`\r\n\r\nfuture\r\n======\r\n\r\nlet the user configure what the order of arguments-bag to look in\r\n\r\ncontribute\r\n==========\r\n1. Change code\r\n2. Add tests\r\n3. Pass unit-tests\r\n4. Send PR\r\n\r\nlisence\r\n=======\r\nMIT",
+  "readmeFilename": "README.md",
+  "_id": "request-param@0.2.0",
+  "_shasum": "97fb50c13d95e29aa5f2ab4d5d4f7657b514189d",
+  "_from": "request-param@",
+  "_resolved": "https://registry.npmjs.org/request-param/-/request-param-0.2.0.tgz"
+}
